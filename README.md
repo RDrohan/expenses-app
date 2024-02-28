@@ -22,13 +22,13 @@ To get a local copy up and running, follow these steps:
 ### Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/expenses-tracking-app.git
+git clone https://github.com/yourusername/expenses-app.git
 ```
 
 ### Install dependencies:
 
 ```bash
-cd expenses-tracking-app
+cd expenses-app
 npm install
 ```
 
