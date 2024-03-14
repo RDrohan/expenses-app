@@ -5,40 +5,37 @@ import * as Yup from "yup";
 const AddExpenseForm = ({ onAdd }) => {
   const initialValues = {
     description: "",
-    amount: "",
+    amount: 0,
+    category: "",
   };
 
   const validationSchema = Yup.object({
     description: Yup.string().required("Description is required"),
     amount: Yup.number()
       .required("Amount is required")
-      .positive("Amount must be positive")
-      .nullable(),
+      .positive("Amount must be positive"),
+    category: Yup.string().required("Category is required"),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (values, { resetForm }) => {
     try {
       const response = await fetch("/api/expenses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          description: values.description,
-          amount: parseFloat(values.amount),
-        }),
+        body: JSON.stringify(values),
       });
       if (response.ok) {
         console.log("Expense added successfully");
         resetForm();
-        onAdd(); // Trigger callback to refetch expenses
+        onAdd();
       } else {
         console.error("Failed to add expense");
       }
     } catch (error) {
       console.error("Error adding expense:", error);
     }
-    setSubmitting(false);
   };
 
   return (
@@ -76,6 +73,29 @@ const AddExpenseForm = ({ onAdd }) => {
           />
           <ErrorMessage
             name="amount"
+            component="div"
+            className="text-red-600 mt-1"
+          />
+        </div>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="category" className="mb-2 text-lg font-semibold">
+            Category
+          </label>
+          <Field
+            as="select"
+            id="category"
+            name="category"
+            className="border border-gray-400 rounded-md p-2"
+          >
+            <option value="">Select Category</option>
+            <option value="FOOD">Food</option>
+            <option value="TRANSPORTATION">Transportation</option>
+            <option value="HOUSING">Housing</option>
+            <option value="ENTERTAINMENT">Entertainment</option>
+            <option value="OTHER">Other</option>
+          </Field>
+          <ErrorMessage
+            name="category"
             component="div"
             className="text-red-600 mt-1"
           />

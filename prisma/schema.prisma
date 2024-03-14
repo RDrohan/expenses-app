@@ -11,5 +11,15 @@ model Expense {
   id          Int      @id @default(autoincrement())
   description String
   amount      Float
+  category    Category
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Category {
+  FOOD
+  TRANSPORTATION
+  HOUSING
+  ENTERTAINMENT
+  OTHER
 }

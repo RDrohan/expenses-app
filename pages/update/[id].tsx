@@ -39,6 +39,7 @@ const UpdateExpensePage = () => {
           id={id}
           initialDescription={expense.description}
           initialAmount={expense.amount}
+          initialCategory={expense.category}
           onUpdate={() => router.push("/")}
         />
       </div>

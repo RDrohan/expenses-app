@@ -28,8 +28,10 @@ const ExpenseList = () => {
         {Array.isArray(expenses) &&
           expenses.map((expense) => (
             <li key={expense.id} className="bg-gray-100 rounded-lg p-4 mb-2">
-              <span className="font-bold">{expense.description}</span> - $
-              {expense.amount}
+              <span className="font-bold">
+                {expense.description} - {expense.category}
+              </span>{" "}
+              - ${expense.amount}
               <Link href={`/update/${expense.id}`}>
                 <button className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                   Update

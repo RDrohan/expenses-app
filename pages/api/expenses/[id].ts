@@ -8,6 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const expenseId = req.query.id;
+
   if (req.method === "GET") {
     try {
       const expense = await prisma.expense.findUnique({
@@ -25,7 +26,7 @@ export default async function handler(
     }
   } else if (req.method === "PATCH") {
     try {
-      const { description, amount } = req.body;
+      const { description, amount, category } = req.body;
       const updatedExpense = await prisma.expense.update({
         where: {
           id: Number(expenseId),
@@ -33,6 +34,7 @@ export default async function handler(
         data: {
           description,
           amount,
+          category,
         },
       });
       res.status(200).json(updatedExpense);

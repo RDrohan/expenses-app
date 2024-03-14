@@ -16,11 +16,12 @@ export default async function handler(
     }
   } else if (req.method === "POST") {
     try {
-      const { description, amount } = req.body;
+      const { description, amount, category } = req.body;
       const newExpense = await prisma.expense.create({
         data: {
           description,
           amount,
+          category,
         },
       });
       res.status(201).json(newExpense);
