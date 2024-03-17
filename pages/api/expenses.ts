@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
+import prisma from "@/lib/db";
+import { validateRequest } from "@/lib/auth";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { user } = await validateRequest(req, res);
+  if (!user) {
+    res.status(401).end();
+    return;
+  }
+
+  const { id } = user;
+
   if (req.method === "GET") {
     try {
       const expenses = await prisma.expense.findMany();
@@ -19,6 +25,7 @@ export default async function handler(
       const { description, amount, category } = req.body;
       const newExpense = await prisma.expense.create({
         data: {
+          userId: +id,
           description,
           amount,
           category,

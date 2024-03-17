@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/db";
+import { validateRequest } from "@/lib/auth";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { user } = await validateRequest(req, res);
+  if (!user) {
+    res.status(401).end();
+    return;
+  }
+
   const expenseId = req.query.id;
 
   if (req.method === "GET") {
