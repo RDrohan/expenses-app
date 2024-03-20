@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const ExpenseList = () => {
   const [expenses, setExpenses] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchExpenses();
@@ -15,9 +16,18 @@ const ExpenseList = () => {
       const response = await fetch("/api/expenses");
       const data = await response.json();
       setExpenses(data);
+      calculateTotal(data);
     } catch (error) {
       console.error("Error fetching expenses:", error);
     }
+  };
+
+  const calculateTotal = (expenses) => {
+    const totalAmount = expenses.reduce(
+      (acc, expense) => acc + expense.amount,
+      0
+    );
+    setTotal(totalAmount);
   };
 
   return (
@@ -31,7 +41,7 @@ const ExpenseList = () => {
               <span className="font-bold">
                 {expense.description} - {expense.category}
               </span>{" "}
-              - ${expense.amount}
+              - €{expense.amount}
               <Link href={`/update/${expense.id}`}>
                 <button className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                   Update
@@ -41,6 +51,9 @@ const ExpenseList = () => {
             </li>
           ))}
       </ul>
+      <div className="mt-4">
+        <span className="font-bold">Grand Total:</span> €{total}
+      </div>
     </div>
   );
 };
